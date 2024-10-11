@@ -54,3 +54,55 @@ def execute_command(command, timeout=5):
 
 
     return output[-2000:]
+
+
+
+def build_directory_tree(path, prefix = "", ignore=None, is_last=False):
+
+    """Build the directory tree in tree-like format.
+    
+    Args:
+     - path: the starting directory path.
+     - prefix: Prefix for the current item, used for recursion.
+     - ignore: List of directory names to ignore.
+     - is_last: Flat to indicated if the current item is the last in its parent directory.
+
+     Returns:
+      - A string reqpresentaion of the directory tree.
+    
+    
+    """
+
+
+    if ignore is None:
+        ignore = []
+
+    if os.path.basename(path) in ignore:
+        return ""
+    
+    output = ""
+    indent = '|    ' if not  is_last else '    '
+
+    if os.path.isdir(path):
+        # It's a directory add ites name to the output and then recurse into it 
+        output += prefix + "|--" + os.path.basename(path) + "/\n"
+
+
+        # List item in the directory 
+        items = os.listdir(path)
+        for index, item in enumerate(items):
+            item_path = os.path.join(path, item)
+            output += build_directory_tree(item_path,
+                                           prefix= prefix + indent, 
+                                           ignore=ignore,
+                                           index = index == len(items) - 1)
+            
+
+
+    else:
+
+        # It's a file, add ites name to the output 
+        output += prefix + "|--  " + os.path.basename(path) + "\n"
+
+
+    return output
