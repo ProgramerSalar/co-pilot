@@ -1,0 +1,26 @@
+{% if is_first_step %}
+So far, step {{ finished_step }} are finished so let's do 
+{% else %}
+
+Let's start with the 
+
+{% endif %}
+
+step #{{i}} - `{{ setp_description}}`.
+
+{% if is_command_step %}
+write all commands that need to be run to fulfill this step. Your response needs to have the following format:
+
+COMMAND: {command_that_needs_to_be_run}
+
+{% elif is_code_change_step %}
+First, you need to know the code that's currently written so that you can appropriately write new or update the existing code. Here are all the file that are written so far in a file tree format:
+
+```
+{{ file_tree }}
+```
+
+Respond with a list of files that you need to see before you can write the code for the current step. This list need to be in a JSON array where each item is a file name. Do not respond with anything 
+other than the mentained JSON array.
+
+{% endif %}
